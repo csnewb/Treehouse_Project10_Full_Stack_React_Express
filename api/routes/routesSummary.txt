@@ -1,0 +1,9 @@
+POST /users
+GET /users (auth)
+DELETE /users/:id
+
+GET /courses
+GET /course/:id
+POST /courses (auth)
+PUT /courses/:id (auth)
+DELETE /courses/:id (auth)
