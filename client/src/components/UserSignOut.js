@@ -11,7 +11,7 @@ const UserSignOut = () => {
 
 
 
-    }, []);
+    });
     return <Navigate to="/" replace/>
 }
 

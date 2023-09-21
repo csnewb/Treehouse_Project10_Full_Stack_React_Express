@@ -51,7 +51,11 @@ function UserSignIn(props) {
         <main>
             <div className="form--centered">
                 <h2>Sign In</h2>
-
+                { errors ?
+                    <p>{errors[0]}</p>
+                    :
+                    null
+                }
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="emailAddress">Email Address</label>
                     <input
