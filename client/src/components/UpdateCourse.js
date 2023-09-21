@@ -12,7 +12,7 @@ function UpdateCourse(props) {
     // State to manage form field values
     const title = useRef('');
     const description = useRef('');
-    const estimatedTimeNeeded = useRef('');
+    const estimatedTime = useRef('');
     const materialsNeeded = useRef('');
 
 
@@ -47,7 +47,7 @@ function UpdateCourse(props) {
         const formData = {
             title: title.current.value,
             description: description.current.value,
-            estimatedTimeNeeded: estimatedTimeNeeded.current.value,
+            estimatedTime: estimatedTime.current.value,
             materialsNeeded: materialsNeeded.current.value,
         }
 
@@ -130,7 +130,7 @@ function UpdateCourse(props) {
                         <div>
                             <label htmlFor="estimatedTime">Estimated Time</label>
                             <input
-                                ref={estimatedTimeNeeded}
+                                ref={estimatedTime}
                                 id="estimatedTime"
                                 name="estimatedTime"
                                 type="text"
