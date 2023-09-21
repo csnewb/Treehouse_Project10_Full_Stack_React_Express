@@ -5,6 +5,7 @@ import axios from "axios";
 function Courses(props) {
     const [courses, setCourse] = useState('');
 
+    // The initial request to get the course data will only fire on initial mounting, stored as courses via useState
     useEffect(() => {
         axios.get('http://localhost:5000/api/courses')
             .then(response => {

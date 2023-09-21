@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useContext} from 'react';
+import React, {useState, useRef, useContext} from 'react';
 import {api} from "../utils/apiHelper";
 import {useNavigate} from "react-router-dom";
 import UserContext from "../context/UserContext";
@@ -12,15 +12,18 @@ function CreateCourse(props) {
     // State to manage form field values
     const title = useRef('');
     const description = useRef('');
-    const estimatedTimeNeeded = useRef('');
+    const estimatedTime = useRef('');
     const materialsNeeded = useRef('');
 
 
     // Set Credentials for API Request
-    const { authUser } = useContext(UserContext)
-    const credentials = {
-        emailAddress: authUser.emailAddress,
-        password: authUser.password,
+    let credentials = null;  // declare an empty credentials variable
+    const { authUser } = useContext(UserContext)  //first we check if a user is signed in
+    if (authUser) {
+        credentials = { // if user is signed in, then we update the credentials variable
+            emailAddress: authUser.emailAddress,
+            password: authUser.password,
+        }
     }
 
     // Get userId
@@ -36,7 +39,7 @@ function CreateCourse(props) {
         const formData = {
             title: title.current.value,
             description: description.current.value,
-            estimatedTimeNeeded: estimatedTimeNeeded.current.value,
+            estimatedTime: estimatedTime.current.value,
             materialsNeeded: materialsNeeded.current.value,
             userId: userId,
         }
@@ -55,6 +58,7 @@ function CreateCourse(props) {
                 const data = await response.json();
                 setErrors(data.error);
                 console.log(`Error returned from server - bad request`)
+                console.log(data.error)
             } else {
                 throw new Error();
             }
@@ -73,7 +77,7 @@ function CreateCourse(props) {
     }
 
 
-    console.log(errors)
+
 
     return (
         <main>
@@ -118,7 +122,7 @@ function CreateCourse(props) {
                                 id="estimatedTime"
                                 name="estimatedTime"
                                 type="text"
-                                ref={estimatedTimeNeeded}
+                                ref={estimatedTime}
                             />
 
                             <label htmlFor="materialsNeeded">Materials Needed</label>

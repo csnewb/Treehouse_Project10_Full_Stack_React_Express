@@ -37,11 +37,13 @@ router.post('/users', async (req, res) => {
         // Return 201 status with no content
         res.status(201).end();
     } catch (error) {
+        console.log("Express Error Caught")
+        // console.log(error)
         if (error.name === 'SequelizeValidationError') {
             // Handle validation errors here
-            res.status(400).json({ error: error.errors.map(e => e.message) });
+            return res.status(400).json({ error: error.errors.map(e => e.message) });
         } else {
-            res.status(500).json({ error: error.message });
+            return res.status(500).json({ error: error.message });
         }
     }
 });

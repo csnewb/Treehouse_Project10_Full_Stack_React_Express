@@ -20,10 +20,13 @@ function UpdateCourse(props) {
     const [errors, setErrors] = useState([]);
 
     // Set Credentials for API Request
-    const { authUser } = useContext(UserContext)
-    const credentials = {
-        emailAddress: authUser.emailAddress,
-        password: authUser.password,
+    let credentials = null;  // declare an empty credentials variable
+    const { authUser } = useContext(UserContext)  //first we check if a user is signed in
+    if (authUser) {
+        credentials = { // if user is signed in, then we update the credentials variable
+            emailAddress: authUser.emailAddress,
+            password: authUser.password,
+        }
     }
 
 
@@ -34,7 +37,7 @@ function UpdateCourse(props) {
                 setCourse(response.data);
                 console.log(response.data)
             });
-    }, []);
+    }, [courseID]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -51,33 +54,6 @@ function UpdateCourse(props) {
         console.log(`formData:`)
         console.log(formData)
 
-        // For MANUAL Testing
-        // axios({
-        //     method: 'put',
-        //     url: `http://localhost:5000/api/courses/${courseID}`,
-        //     data: {
-        //         title: title.current.value,
-        //         description: description.current.value,
-        //         estimatedTimeNeeded: estimatedTimeNeeded.current.value,
-        //         materialsNeeded: materialsNeeded.current.value,
-        //     },
-        //     auth: {
-        //         username: 'joe@smith.com',
-        //         password: 'joepassword',
-        //     }
-        //
-        //
-        // }).then(response => {
-        //     if (response.status === 204) {
-        //         console.log("Course successfully updated")
-        //         navigate("/");  // Redirect to root path
-        //     } else {
-        //         console.error('Failed to delete course');
-        //     }
-        // }).catch(error => {
-        //     console.error('Error:', error);
-        // });
-
 
         // uses apiHelper to make the fetch request
         try {
@@ -88,6 +64,8 @@ function UpdateCourse(props) {
             } else if (response.status === 400) {
                 const data = await response.json();
                 setErrors(data.error);
+                console.log(`Error returned from server - bad request`)
+                console.log(data.error)
             } else {
                 throw new Error();
             }
@@ -101,10 +79,12 @@ function UpdateCourse(props) {
     }
 
     const handleCancel = (event) => {
+        // if the cancel button is clicked we will navigate back 1 page in history
         event.preventDefault();
         navigate(-1)
     }
 
+    // to prevent an error with null values, we use this ternary to check if the value is there or set an empty string
     const firstName = course.User ? course.User.firstName : '';
     const lastName = course.User ? course.User.lastName : '';
 

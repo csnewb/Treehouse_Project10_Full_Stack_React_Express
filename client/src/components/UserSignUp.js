@@ -1,5 +1,5 @@
-import { useContext, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useContext, useRef, useState } from 'react';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import UserContext from "../context/UserContext";
 import {api} from "../utils/apiHelper";
 
@@ -7,7 +7,7 @@ import {api} from "../utils/apiHelper";
 function UserSignUp(props) {
     const {actions} = useContext(UserContext)
     const navigate = useNavigate();
-
+    const location = useLocation();
 
     // State
     const firstName = useRef(null);
@@ -19,6 +19,13 @@ function UserSignUp(props) {
     // event handlers
     const handleSubmit =  async (event) => {
         event.preventDefault();
+
+
+
+        let from = '/';
+        if (location.state) {
+            from = location.state.from
+        }
 
         const user = {
             firstName: firstName.current.value,
@@ -35,10 +42,10 @@ function UserSignUp(props) {
             if (response.status === 201) {
                 console.log(`${user.emailAddress} is successfully signed up`)
                 await actions.signIn(user);
-                navigate("/authenticated")
+                navigate(from)
             } else if (response.status === 400) {
                 const data = await response.json();
-                setErrors(data.errors);
+                setErrors(data.error);
             } else {
                 throw new Error();
             }
@@ -60,6 +67,18 @@ function UserSignUp(props) {
         <main>
             <div className="form--centered">
                 <h2>Sign Up</h2>
+                { errors.length > 0 ?
+                    <div className="validation--errors">
+                        <h3>Validation Errors</h3>
+                        <ul>
+                            {errors.map((error, index) => (
+                                <li key={index}>{error}</li>
+                            ) )}
+                        </ul>
+                    </div>
+                    :
+                    null
+                }
 
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="firstName">First Name</label>

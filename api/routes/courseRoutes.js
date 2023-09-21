@@ -88,10 +88,10 @@ router.put('/courses/:id', authenticateUser, async (req, res) => {
         console.log(req.body);
         const { title, description } = req.body;
 
-        // Manual validation for title and description
-        if (!title || !description) {
-            return res.status(400).json({ error: 'Title and Description are required.' });
-        }
+        // // Manual validation for title and description
+        // if (!title || !description) {
+        //     return res.status(400).json({ error: 'Title and Description are required.' });
+        // }
 
         const course = await Course.findByPk(req.params.id);
         if (course) {
@@ -99,10 +99,9 @@ router.put('/courses/:id', authenticateUser, async (req, res) => {
 
             // Return a 204 HTTP status code and no content.
             res.status(204).end();
-        } else {
-            res.status(404).json({ message: 'Course not found' });
         }
     } catch (error) {
+        console.log("Express Error Caught")
         if (error.name === 'SequelizeValidationError') {
             return res.status(400).json({ error: error.errors.map(e => e.message) });
         }
